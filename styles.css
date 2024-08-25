@@ -1,135 +1,98 @@
-/* styles.css */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f7f6;
-    color: #333;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     flex-direction: column;
+    align-items: center;
+    background-color: #f9f9f9;
 }
 
 h1 {
-    text-align: center;
-    color: #4CAF50;
+    color: #333;
+    margin-top: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    max-width: 400px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
     margin-bottom: 20px;
 }
 
-form, #success-screen {
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    margin: 20px;
-    box-sizing: border-box;
-}
-
 label {
-    display: block;
-    margin: 10px 0 5px;
-    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
 }
 
-input[type="text"], input[type="date"], input[type="checkbox"] {
-    width: calc(100% - 22px);
+input[type="text"],
+input[type="date"],
+input[type="checkbox"],
+button {
     padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     font-size: 16px;
 }
 
+input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+
 button {
-    width: 100%;
     background-color: #4CAF50;
     color: white;
-    padding: 12px 20px;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
-    font-size: 18px;
-    transition: background-color 0.3s ease;
 }
 
 button:hover {
     background-color: #45a049;
 }
 
-#processing {
-    display: none;
+#loading, #result {
     text-align: center;
-    font-size: 20px;
-}
-
-#success-screen {
-    display: none;
-    text-align: center;
-}
-
-#success-screen h2 {
-    color: #4CAF50;
-    margin-bottom: 20px;
-}
-
-#success-details {
-    text-align: left;
-    background-color: #f4f7f6;
-    padding: 10px;
-    border-radius: 4px;
-    font-size: 16px;
-    max-width: 100%;
-    overflow-wrap: break-word;
-}
-
-#success-details p {
-    margin: 10px 0;
-}
-
-#success-details p span {
-    font-weight: bold;
-    color: #333;
-}
-
-#success-qr-code {
     margin-top: 20px;
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsividade */
-@media (max-width: 480px) {
-    form, #success-screen {
-        padding: 15px;
-        width: calc(100% - 40px);
-    }
+#result-details {
+    text-align: left;
+    white-space: pre-wrap;
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+}
 
-    h1 {
-        font-size: 24px;
-        margin-bottom: 15px;
+#qr-code {
+    margin-top: 20px;
+    width: 150px;
+    height: 150px;
+}
+
+#cadastro-info p {
+    font-size: 18px;
+    margin: 5px 0;
+}
+
+#cadastro-info span {
+    font-weight: bold;
+}
+
+@media screen and (max-width: 600px) {
+    form {
+        width: 100%;
+        padding: 15px;
     }
 
     button {
-        font-size: 16px;
-        padding: 10px 15px;
-    }
-
-    #processing {
-        font-size: 18px;
-    }
-
-    label {
+        padding: 10px;
         font-size: 14px;
-    }
-
-    input[type="text"], input[type="date"], input[type="checkbox"] {
-        font-size: 14px;
-        padding: 8px;
     }
 }
