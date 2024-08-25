@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuários</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Cadastro de Usuários</h1>
+        <form id="registrationForm">
+            <input type="text" id="name" placeholder="Nome" required>
+            <input type="date" id="birthDate" required>
+            <input type="text" id="cpf" placeholder="CPF" required>
+            <input type="text" id="church" placeholder="Igreja" required>
+            <input type="text" id="district" placeholder="Distrito" required>
+            <input type="text" id="whatsapp" placeholder="WhatsApp" required>
+            <label><input type="checkbox" id="acceptTerms"> Aceito os termos de uso</label>
+            <button type="submit">Cadastrar</button>
+        </form>
+        <div id="qrCodeContainer"></div>
+        <h2>Consulta de Usuários</h2>
+        <form id="searchForm">
+            <input type="text" id="searchName" placeholder="Nome">
+            <input type="text" id="searchId" placeholder="ID">
+            <input type="text" id="searchCpf" placeholder="CPF">
+            <button type="submit">Buscar</button>
+        </form>
+        <div id="searchResults"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
