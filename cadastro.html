@@ -11,7 +11,14 @@
     <div id="cadastro-info">
         <p>Carregando informações...</p>
     </div>
+    <div id="qr-code-container" style="display: none;">
+        <h2>QR Code</h2>
+        <img id="qr-code" alt="QR Code">
+    </div>
+    <button id="save-button" style="display: none;">Salvar como PDF ou Imagem</button>
 
     <script src="cadastro.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </body>
 </html>
