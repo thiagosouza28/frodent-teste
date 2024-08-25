@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Usuário</title>
     <link rel="stylesheet" href="styles.css">
-
 </head>
 <body>
     <h1>Cadastro de Usuário</h1>
+
     <form id="registration-form">
         <label for="name">Nome:</label>
         <input type="text" id="name" name="name" required>
@@ -36,10 +36,20 @@
         <button type="submit">Cadastrar</button>
     </form>
 
+    <div id="processing">
+        <p>Processando... Por favor, aguarde.</p>
+    </div>
+
     <div id="result">
         <h2>Comprovante de Cadastro</h2>
         <pre id="result-details"></pre>
         <img id="qr-code" alt="QR Code" />
+    </div>
+
+    <div id="success-screen">
+        <h2>Cadastro Realizado com Sucesso!</h2>
+        <pre id="success-details"></pre>
+        <img id="success-qr-code" alt="QR Code" />
     </div>
 
     <script src="script.js"></script>
