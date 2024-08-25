@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const response = await fetch('https://backend-teste-ebiv.onrender.com/register', {
+            const response = await fetch('https://backend-teste-ebiv.onrender.com/api/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
