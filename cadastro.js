@@ -48,10 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
     saveButton.addEventListener('click', () => {
         html2canvas(cadastroInfo).then(canvas => {
             const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF();
+            const pdf = new jsPDF.jsPDF();
             pdf.addImage(imgData, 'PNG', 10, 10);
             pdf.save('participante.pdf');
-        });
+        }).catch(error => console.error('Erro ao gerar PDF:', error));
     });
 
     loadParticipantInfo();
