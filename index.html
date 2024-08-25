@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Usuário</title>
+    <title>Cadastro de Participante</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Cadastro de Usuário</h1>
-
+    <h1>Cadastro de Participante</h1>
     <form id="registration-form">
         <label for="name">Nome:</label>
         <input type="text" id="name" name="name" required>
@@ -36,14 +35,14 @@
         <button type="submit">Cadastrar</button>
     </form>
 
-    <div id="processing">
-        <p>Processando... Por favor, aguarde.</p>
+    <div id="loading" style="display:none;">
+        <p>Enviando dados, por favor aguarde...</p>
     </div>
 
-    <div id="success-screen">
-        <h2>Cadastro Realizado com Sucesso!</h2>
-        <div id="success-details"></div>
-        <img id="success-qr-code" alt="QR Code" />
+    <div id="result" style="display:none;">
+        <h2>Cadastro realizado com sucesso!</h2>
+        <pre id="result-details"></pre>
+        <img id="qr-code" alt="QR Code" />
     </div>
 
     <script src="script.js"></script>
