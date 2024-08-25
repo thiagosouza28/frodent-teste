@@ -31,7 +31,10 @@ document.getElementById('registerForm').addEventListener('submit', function (e) 
             alert('Erro ao cadastrar usuário.');
         }
     })
-    .catch(error => console.error('Erro:', error));
+    .catch(error => {
+        console.error('Erro:', error);
+        alert('Ocorreu um erro. Verifique o console para mais detalhes.');
+    });
 });
 
 document.getElementById('searchForm').addEventListener('submit', function (e) {
@@ -66,5 +69,8 @@ document.getElementById('searchForm').addEventListener('submit', function (e) {
             }
             document.getElementById('searchResults').innerHTML = resultsHtml;
         })
-        .catch(error => console.error('Erro:', error));
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Ocorreu um erro. Verifique o console para mais detalhes.');
+        });
 });
