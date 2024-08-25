@@ -38,7 +38,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // Exibir tela de sucesso
             processingScreen.style.display = 'none';
             successScreen.style.display = 'block';
-            document.getElementById('success-details').textContent = JSON.stringify(result.user, null, 2);
+            
+            const successDetails = document.getElementById('success-details');
+            successDetails.innerHTML = `
+                <p><span>Nome:</span> ${result.user.name}</p>
+                <p><span>Data de Nascimento:</span> ${result.user.birthDate}</p>
+                <p><span>CPF:</span> ${result.user.cpf}</p>
+                <p><span>Igreja:</span> ${result.user.church}</p>
+                <p><span>Distrito:</span> ${result.user.district}</p>
+                <p><span>WhatsApp:</span> ${result.user.whatsapp}</p>
+            `;
+
             document.getElementById('success-qr-code').src = result.qrCode;
 
         } catch (error) {
