@@ -40,14 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         // Gerar e exibir QR Code
-        fetch(`https://backend-teste-ebiv.onrender.com/api/register/${id}/qrcode`)
-            .then(response => response.json())
-            .then(data => {
-                qrCodeImg.src = data.qrCode;
-                qrCodeContainer.style.display = 'block';
-            })
-            .catch(error => console.error('Erro ao carregar QR Code:', error));
-
+        qrCodeImg.src = `https://backend-teste-ebiv.onrender.com/api/register/${id}/qrcode`;
+        qrCodeContainer.style.display = 'block';
         saveButton.style.display = 'block';
     }
 
