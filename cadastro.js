@@ -1,115 +1,49 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const cadastrosTable = document.getElementById('cadastros-table').getElementsByTagName('tbody')[0];
-    const loading = document.getElementById('loading');
-    const cadastrosList = document.getElementById('cadastros-list');
-    const editModal = document.getElementById('edit-modal');
-    const closeModalButton = document.querySelector('.modal .close');
-    const editForm = document.getElementById('edit-form');
+document.addEventListener('DOMContentLoaded', async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
 
-    async function loadCadastros() {
-        try {
-            const response = await fetch('https://backend-teste-ebiv.onrender.com/api/users');
-            if (!response.ok) {
-                throw new Error('Erro ao carregar cadastros.');
-            }
-
-            const cadastros = await response.json();
-            loading.style.display = 'none';
-            cadastrosList.style.display = 'block';
-
-            cadastrosTable.innerHTML = '';
-            cadastros.forEach(participant => {
-                const row = cadastrosTable.insertRow();
-                row.innerHTML = `
-                    <td>${participant.id}</td>
-                    <td>${participant.name}</td>
-                    <td>${participant.birthDate}</td>
-                    <td>${participant.age}</td>
-                    <td>${participant.cpf}</td>
-                    <td>${participant.church}</td>
-                    <td>${participant.district}</td>
-                    <td>${participant.whatsapp}</td>
-                    <td>
-                        <button class="edit-btn" data-id="${participant.id}">Editar</button>
-                        <button class="delete-btn" data-id="${participant.id}">Excluir</button>
-                    </td>
-                `;
-            });
-        } catch (error) {
-            console.error('Erro:', error);
-            loading.innerHTML = 'Erro ao carregar cadastros.';
-        }
+    if (!id) {
+        document.getElementById('cadastro-info').innerHTML = '<p>ID do participante não encontrado.</p>';
+        return;
     }
 
-    loadCadastros();
-
-    document.addEventListener('click', async (event) => {
-        if (event.target.classList.contains('edit-btn')) {
-            const id = event.target.getAttribute('data-id');
-            try {
-                const response = await fetch(`https://backend-teste-ebiv.onrender.com/api/register/${id}`);
-                if (!response.ok) {
-                    throw new Error('Erro ao carregar dados do participante.');
-                }
-
-                const participant = await response.json();
-                document.getElementById('edit-id').value = participant.id;
-                document.getElementById('edit-name').value = participant.name;
-                document.getElementById('edit-birthDate').value = participant.birthDate;
-                document.getElementById('edit-cpf').value = participant.cpf;
-                document.getElementById('edit-church').value = participant.church;
-                document.getElementById('edit-district').value = participant.district;
-                document.getElementById('edit-whatsapp').value = participant.whatsapp;
-                
-                editModal.style.display = 'block';
-            } catch (error) {
-                console.error('Erro:', error);
-            }
+    try {
+        const response = await fetch(`https://backend-teste-ebiv.onrender.com/api/register/${id}`);
+        if (!response.ok) {
+            throw new Error('Erro ao buscar informações do participante.');
         }
 
-        if (event.target.classList.contains('delete-btn')) {
-            const id = event.target.getAttribute('data-id');
-            if (confirm('Tem certeza de que deseja excluir este participante?')) {
-                try {
-                    const response = await fetch(`https://backend-teste-ebiv.onrender.com/api/register/${id}`, {
-                        method: 'DELETE'
-                    });
-                    if (!response.ok) {
-                        throw new Error('Erro ao excluir participante.');
-                    }
-                    loadCadastros();
-                } catch (error) {
-                    console.error('Erro:', error);
-                }
-            }
-        }
-    });
+        const participant = await response.json();
+        const infoDiv = document.getElementById('cadastro-info');
+        const qrCodeImg = document.getElementById('qr-code');
+        const qrCodeContainer = document.getElementById('qr-code-container');
+        const saveButton = document.getElementById('save-button');
 
-    closeModalButton.addEventListener('click', () => {
-        editModal.style.display = 'none';
-    });
+        infoDiv.innerHTML = `
+            <p><strong>Nome:</strong> ${participant.name}</p>
+            <p><strong>Data de Nascimento:</strong> ${participant.birthDate}</p>
+            <p><strong>Idade:</strong> ${participant.age}</p>
+            <p><strong>CPF:</strong> ${participant.cpf}</p>
+            <p><strong>Igreja:</strong> ${participant.church}</p>
+            <p><strong>Distrito:</strong> ${participant.district}</p>
+            <p><strong>WhatsApp:</strong> ${participant.whatsapp}</p>
+        `;
 
-    editForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const formData = new FormData(editForm);
-        const data = Object.fromEntries(formData.entries());
+        qrCodeImg.src = participant.qrCode;
+        qrCodeContainer.style.display = 'block';
+        saveButton.style.display = 'block';
 
-        try {
-            const response = await fetch(`https://backend-teste-ebiv.onrender.com/api/register/${data.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
+        saveButton.addEventListener('click', () => {
+            html2canvas(document.body).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF();
+                pdf.addImage(imgData, 'PNG', 0, 0, 210, 297); // Ajusta o tamanho para A4
+                pdf.save('participante.pdf');
             });
+        });
 
-            if (!response.ok) {
-                throw new Error('Erro ao atualizar participante.');
-            }
-            editModal.style.display = 'none';
-            loadCadastros();
-        } catch (error) {
-            console.error('Erro:', error);
-        }
-    });
+    } catch (error) {
+        console.error('Erro:', error);
+        document.getElementById('cadastro-info').innerHTML = '<p>Erro ao carregar informações do participante.</p>';
+    }
 });
