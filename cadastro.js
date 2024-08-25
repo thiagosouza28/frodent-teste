@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             html2canvas(document.body).then(canvas => {
                 const imgData = canvas.toDataURL('image/png');
                 const pdf = new jsPDF();
-                pdf.addImage(imgData, 'PNG', 0, 0);
+                pdf.addImage(imgData, 'PNG', 0, 0, 210, 297); // Ajusta o tamanho para A4
                 pdf.save('participante.pdf');
             });
         });
