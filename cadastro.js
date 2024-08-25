@@ -1,25 +1,35 @@
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
+    const cadastroInfo = document.getElementById('cadastro-info');
+    const qrCodeContainer = document.getElementById('qr-code-container');
+    const qrCodeImg = document.getElementById('qr-code');
+    const saveButton = document.getElementById('save-button');
+
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
 
     if (!id) {
-        document.getElementById('cadastro-info').innerHTML = '<p>ID do participante não encontrado.</p>';
+        cadastroInfo.innerHTML = 'ID do participante não fornecido.';
         return;
     }
 
-    try {
-        const response = await fetch(`https://backend-teste-ebiv.onrender.com/api/register/${id}`);
-        if (!response.ok) {
-            throw new Error('Erro ao buscar informações do participante.');
+    async function loadParticipantInfo() {
+        try {
+            const response = await fetch(`https://backend-teste-ebiv.onrender.com/api/register/${id}`);
+            if (!response.ok) {
+                throw new Error('Erro ao carregar informações do participante.');
+            }
+
+            const participant = await response.json();
+            displayParticipantInfo(participant);
+        } catch (error) {
+            console.error('Erro:', error);
+            cadastroInfo.innerHTML = 'Erro ao carregar informações.';
         }
+    }
 
-        const participant = await response.json();
-        const infoDiv = document.getElementById('cadastro-info');
-        const qrCodeImg = document.getElementById('qr-code');
-        const qrCodeContainer = document.getElementById('qr-code-container');
-        const saveButton = document.getElementById('save-button');
-
-        infoDiv.innerHTML = `
+    function displayParticipantInfo(participant) {
+        cadastroInfo.innerHTML = `
+            <h2>Informações do Participante</h2>
             <p><strong>Nome:</strong> ${participant.name}</p>
             <p><strong>Data de Nascimento:</strong> ${participant.birthDate}</p>
             <p><strong>Idade:</strong> ${participant.age}</p>
@@ -29,21 +39,26 @@ document.addEventListener('DOMContentLoaded', async () => {
             <p><strong>WhatsApp:</strong> ${participant.whatsapp}</p>
         `;
 
-        qrCodeImg.src = participant.qrCode;
-        qrCodeContainer.style.display = 'block';
+        // Gerar e exibir QR Code
+        fetch(`https://backend-teste-ebiv.onrender.com/api/register/${id}/qrcode`)
+            .then(response => response.json())
+            .then(data => {
+                qrCodeImg.src = data.qrCode;
+                qrCodeContainer.style.display = 'block';
+            })
+            .catch(error => console.error('Erro ao carregar QR Code:', error));
+
         saveButton.style.display = 'block';
-
-        saveButton.addEventListener('click', () => {
-            html2canvas(document.body).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF();
-                pdf.addImage(imgData, 'PNG', 0, 0, 210, 297); // Ajusta o tamanho para A4
-                pdf.save('participante.pdf');
-            });
-        });
-
-    } catch (error) {
-        console.error('Erro:', error);
-        document.getElementById('cadastro-info').innerHTML = '<p>Erro ao carregar informações do participante.</p>';
     }
+
+    saveButton.addEventListener('click', () => {
+        html2canvas(cadastroInfo).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF();
+            pdf.addImage(imgData, 'PNG', 10, 10);
+            pdf.save('participante.pdf');
+        });
+    });
+
+    loadParticipantInfo();
 });
