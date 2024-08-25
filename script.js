@@ -1,8 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('registration-form');
+    const processingScreen = document.getElementById('processing');
+    const successScreen = document.getElementById('success-screen');
+    const resultScreen = document.getElementById('result');
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
+        form.style.display = 'none';
+        processingScreen.style.display = 'block';
 
         const formData = new FormData(form);
         const data = {
@@ -29,10 +34,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const result = await response.json();
-            document.getElementById('result-details').textContent = JSON.stringify(result.user, null, 2);
-            document.getElementById('qr-code').src = result.qrCode;
+
+            // Exibir tela de sucesso
+            processingScreen.style.display = 'none';
+            successScreen.style.display = 'block';
+            document.getElementById('success-details').textContent = JSON.stringify(result.user, null, 2);
+            document.getElementById('success-qr-code').src = result.qrCode;
+
         } catch (error) {
             console.error('Erro:', error);
+            processingScreen.style.display = 'none';
+            form.style.display = 'block';
+            resultScreen.style.display = 'block';
             document.getElementById('result-details').textContent = 'Erro ao realizar o cadastro.';
         }
     });
