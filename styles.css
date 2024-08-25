@@ -1,6 +1,6 @@
 /* styles.css */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f7f6;
     color: #333;
     margin: 0;
@@ -9,21 +9,24 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    flex-direction: column;
 }
 
 h1 {
     text-align: center;
     color: #4CAF50;
+    margin-bottom: 20px;
 }
 
-form {
+form, #success-screen {
     background: #fff;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
+    max-width: 400px;
     margin: 20px;
+    box-sizing: border-box;
 }
 
 label {
@@ -50,16 +53,11 @@ button {
     border-radius: 4px;
     cursor: pointer;
     font-size: 18px;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
     background-color: #45a049;
-}
-
-#result {
-    display: none;
-    margin-top: 20px;
-    text-align: center;
 }
 
 #processing {
@@ -70,13 +68,6 @@ button:hover {
 
 #success-screen {
     display: none;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    width: 100%;
-    margin: 20px;
     text-align: center;
 }
 
@@ -85,9 +76,60 @@ button:hover {
     margin-bottom: 20px;
 }
 
-#success-screen pre {
+#success-details {
     text-align: left;
     background-color: #f4f7f6;
     padding: 10px;
     border-radius: 4px;
+    font-size: 16px;
+    max-width: 100%;
+    overflow-wrap: break-word;
+}
+
+#success-details p {
+    margin: 10px 0;
+}
+
+#success-details p span {
+    font-weight: bold;
+    color: #333;
+}
+
+#success-qr-code {
+    margin-top: 20px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+    form, #success-screen {
+        padding: 15px;
+        width: calc(100% - 40px);
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    button {
+        font-size: 16px;
+        padding: 10px 15px;
+    }
+
+    #processing {
+        font-size: 18px;
+    }
+
+    label {
+        font-size: 14px;
+    }
+
+    input[type="text"], input[type="date"], input[type="checkbox"] {
+        font-size: 14px;
+        padding: 8px;
+    }
 }
