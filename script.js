@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const response = await fetch('https://backend-teste-wheat.vercel.app/api/register', {
+            const response = await fetch('https://YOUR_NETLIFY_SITE_NAME.netlify.app/.netlify/functions/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
