@@ -3,56 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciar Cadastros</title>
-    <link rel="stylesheet" href="styles-register.css">
+    <title>Informações do Participante</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Gerenciar Cadastros</h1>
-    <div id="cadastros-container">
-        <div id="loading">Carregando cadastros...</div>
-        <div id="cadastros-list" style="display: none;">
-            <table id="cadastros-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Data de Nascimento</th>
-                        <th>Idade</th>
-                        <th>CPF</th>
-                        <th>Igreja</th>
-                        <th>Distrito</th>
-                        <th>WhatsApp</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+    <h1>Informações do Participante</h1>
+    <div id="cadastro-info">
+        <p>Carregando informações...</p>
     </div>
-
-    <div id="edit-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Editar Participante</h2>
-            <form id="edit-form">
-                <input type="hidden" id="edit-id" name="id">
-                <label for="edit-name">Nome:</label>
-                <input type="text" id="edit-name" name="name" required>
-                <label for="edit-birthDate">Data de Nascimento:</label>
-                <input type="date" id="edit-birthDate" name="birthDate" required>
-                <label for="edit-cpf">CPF:</label>
-                <input type="text" id="edit-cpf" name="cpf" required>
-                <label for="edit-church">Igreja:</label>
-                <input type="text" id="edit-church" name="church" required>
-                <label for="edit-district">Distrito:</label>
-                <input type="text" id="edit-district" name="district" required>
-                <label for="edit-whatsapp">WhatsApp:</label>
-                <input type="text" id="edit-whatsapp" name="whatsapp" required>
-                <button type="submit">Salvar</button>
-            </form>
-        </div>
+    <div id="qr-code-container" style="display: none;">
+        <h2>QR Code</h2>
+        <img id="qr-code" alt="QR Code">
     </div>
+    <button id="save-button" style="display: none;">Salvar como PDF</button>
 
-    <script src="cadastros.js"></script>
+    <script src="cadastro.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </body>
 </html>
