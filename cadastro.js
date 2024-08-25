@@ -14,8 +14,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const participant = await response.json();
-
         const infoDiv = document.getElementById('cadastro-info');
+        const qrCodeImg = document.getElementById('qr-code');
+        const qrCodeContainer = document.getElementById('qr-code-container');
+        const saveButton = document.getElementById('save-button');
+
         infoDiv.innerHTML = `
             <p><strong>Nome:</strong> ${participant.name}</p>
             <p><strong>Data de Nascimento:</strong> ${participant.birthDate}</p>
@@ -25,6 +28,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             <p><strong>Distrito:</strong> ${participant.district}</p>
             <p><strong>WhatsApp:</strong> ${participant.whatsapp}</p>
         `;
+
+        qrCodeImg.src = participant.qrCode;
+        qrCodeContainer.style.display = 'block';
+        saveButton.style.display = 'block';
+
+        saveButton.addEventListener('click', () => {
+            html2canvas(document.body).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF();
+                pdf.addImage(imgData, 'PNG', 0, 0);
+                pdf.save('participante.pdf');
+            });
+        });
+
     } catch (error) {
         console.error('Erro:', error);
         document.getElementById('cadastro-info').innerHTML = '<p>Erro ao carregar informações do participante.</p>';
