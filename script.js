@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const response = await fetch('https://66cb587b4600d735f4d95012--sparkling-snickerdoodle-106ed1.netlify.app/netlify/functions/register', {
+            const response = await fetch('https://backend-teste-ebiv.onrender.com/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
