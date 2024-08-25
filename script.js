@@ -1,12 +1,8 @@
-document.addEventListener('DOMContentLoaded', function() {
-       // Your code to add event listeners goes here
-       const myElement = document.getElementById('myElement');
-       if (myElement) {
-           myElement.addEventListener('click', function() {
-               // ...
-           });
-       }
-   });
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('registration-form');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
 
         const formData = new FormData(form);
         const data = {
