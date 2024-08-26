@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,19 +30,6 @@
         h1 {
             margin-bottom: 20px;
             color: #333;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        input[type="text"] {
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
         }
 
         .button {
@@ -88,29 +76,22 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <h1>Consultar Participante</h1>
-        <form id="confirmation-form">
-            <input type="text" name="participantId" placeholder="ID do Participante" required>
-            <button type="submit" class="button">Consultar</button>
-        </form>
+        <h1>Detalhes do Participante</h1>
         <div id="result-details"></div>
         <img id="qr-code" alt="QR Code">
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('confirmation-form');
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const participantId = urlParams.get('participantId');
 
-            form.addEventListener('submit', async (event) => {
-                event.preventDefault();
-
-                const formData = new FormData(form);
-                const participantId = formData.get('participantId');
-
+            if (participantId) {
                 try {
                     const response = await fetch(`https://backend-teste-ebiv.onrender.com/api/participant/${participantId}`);
-                    
+
                     if (!response.ok) {
                         throw new Error(`Erro HTTP! status: ${response.status}`);
                     }
@@ -128,17 +109,21 @@
                         <strong>Distrito:</strong> ${participant.district}<br>
                         <strong>WhatsApp:</strong> ${participant.whatsapp}<br>
                     `;
-                    
+
                     const qrCodeElement = document.getElementById('qr-code');
                     qrCodeElement.src = result.qrCode;
                     qrCodeElement.style.display = 'block';
                 } catch (error) {
                     console.error('Erro:', error);
-                    document.getElementById('result-details').textContent = 'Erro ao consultar o participante.';
+                    document.getElementById('result-details').textContent = 'Erro ao carregar os dados do participante.';
                     document.getElementById('qr-code').style.display = 'none';
                 }
-            });
+            } else {
+                document.getElementById('result-details').textContent = 'ID do participante não encontrado.';
+                document.getElementById('qr-code').style.display = 'none';
+            }
         });
     </script>
 </body>
+
 </html>
