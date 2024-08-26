@@ -60,7 +60,7 @@
 <body>
     <div class="container">
         <h1>Detalhes do Participante</h1>
-        <div id="result-details"></div>
+        <div id="result-details">Carregando dados...</div>
         <img id="qr-code" alt="QR Code">
     </div>
     <script>
@@ -100,8 +100,12 @@
                         `;
 
                         const qrCodeElement = document.getElementById('qr-code');
-                        qrCodeElement.src = result.qrCode;
-                        qrCodeElement.style.display = 'block';
+                        if (result.qrCode) {
+                            qrCodeElement.src = result.qrCode;
+                            qrCodeElement.style.display = 'block';
+                        } else {
+                            qrCodeElement.style.display = 'none';
+                        }
                     } else {
                         throw new Error('Dados do participante não encontrados.');
                     }
