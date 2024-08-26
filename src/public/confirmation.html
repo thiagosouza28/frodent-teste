@@ -205,22 +205,29 @@
 
             // Adicionar título
             doc.setFontSize(22);
-            doc.text('Detalhes do Participante', 10, 10);
+            doc.setTextColor(255, 255, 255); // Texto branco para o título
+            doc.setFillColor(50, 205, 50); // Cor de fundo verde claro
+            doc.rect(0, 0, 210, 20, 'F'); // Fundo verde claro
+            doc.text('Detalhes do Participante', 10, 15);
 
             // Adicionar detalhes do participante
             doc.setFontSize(16);
-            doc.setTextColor(0, 0, 0);
+            doc.setTextColor(0, 0, 0); // Texto preto
             const details = detailsElement.innerText
                 .replace('Data de Nascimento:', 'Data de Nascimento: ')
                 .replace(/(\d{4}-\d{2}-\d{2})/, (match) => {
                     const date = new Date(match);
                     return date.toLocaleDateString('pt-BR');
                 });
-            doc.text(details, 10, 20);
+            doc.text(details, 10, 30);
 
-            // Adicionar QR Code
+            // Adicionar QR Code com borda verde
             if (qrCodeDataUrl) {
-                doc.addImage(qrCodeDataUrl, 'PNG', 10, 50, 50, 50); // Ajuste o tamanho conforme necessário
+                const qrCodeWidth = 50;
+                const qrCodeHeight = 50;
+                doc.setDrawColor(50, 205, 50); // Cor da borda verde
+                doc.rect(10, 50, qrCodeWidth, qrCodeHeight); // Borda verde
+                doc.addImage(qrCodeDataUrl, 'PNG', 10, 50, qrCodeWidth, qrCodeHeight);
             }
 
             // Salvar PDF
