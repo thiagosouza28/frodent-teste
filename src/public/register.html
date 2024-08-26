@@ -173,7 +173,7 @@
 
                     if (result.participant && result.participant.id) {
                         // Redireciona para a página de confirmação com o ID do participante
-                        window.location.href = `confirmation.html?participantId=${result.participant.id}`;
+                        window.location.href = `confirmation.html?id=${result.participant.id}`;
                     } else {
                         throw new Error('ID do participante não encontrado na resposta.');
                     }
