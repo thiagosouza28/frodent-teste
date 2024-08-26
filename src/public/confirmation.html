@@ -7,108 +7,104 @@
     <title>Consulta de Participante</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to right, #ff6b6b, #f94d6a);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-        }
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to right, #00ff7f, #32cd32);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
 
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            max-width: 450px;
-            width: 90%;
-            margin: 20px;
-        }
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 450px;
+    width: 90%;
+    margin: 20px;
+}
 
-        h1 {
-            margin-bottom: 20px;
-            color: #333;
-            font-size: 24px;
-            font-weight: 600;
-        }
+h1 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+}
 
-        #result-details {
-            text-align: left;
-            white-space: pre-wrap;
-            margin-top: 20px;
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            color: #333;
-            font-size: 16px;
-            line-height: 1.5;
-        }
+#result-details {
+    text-align: left; /* Alinhando o texto à esquerda */
+    white-space: pre-wrap;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
+}
 
-        #qr-code {
-            margin-top: 20px;
-            max-width: 100%;
-            height: auto;
-            border: 2px solid #f94d6a;
-            border-radius: 8px;
-            display: none;
-            margin-left: auto;
-            margin-right: auto;
-        }
+#qr-code {
+    margin-top: 20px;
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #32cd32; /* Borda verde para combinar com o tema */
+    border-radius: 8px;
+    display: none;
+    margin-left: auto;
+    margin-right: auto;
+}
 
-        .btn-back,
-        .btn-save {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #f94d6a;
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-right: 10px;
-        }
+.btn-back {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #32cd32;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
-        .btn-back:hover,
-        .btn-save:hover {
-            background-color: #d63e58;
-        }
+.btn-back:hover {
+    background-color: #228b22;
+}
 
-        #loading-text {
-            font-size: 16px;
-            color: #333;
-            margin-top: 20px;
-            display: none;
-        }
+#loading-text {
+    font-size: 16px;
+    color: #333;
+    margin-top: 20px;
+    display: none;
+}
 
-        @media (max-width: 600px) {
-            .container {
-                padding: 15px;
-                margin: 10px;
-                width: 100%;
-                box-shadow: none;
-            }
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+        margin: 10px;
+        width: 100%;
+        box-shadow: none;
+    }
 
-            h1 {
-                font-size: 22px;
-            }
+    h1 {
+        font-size: 22px;
+    }
 
-            #result-details {
-                font-size: 14px;
-                padding: 10px;
-            }
+    #result-details {
+        font-size: 14px;
+        padding: 10px;
+    }
 
-            .btn-back,
-            .btn-save {
-                padding: 10px 15px;
-                font-size: 14px;
-            }
-        }
+    .btn-back {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+}
     </style>
 </head>
 
