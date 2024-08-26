@@ -31,7 +31,7 @@
         h1 {
             margin-bottom: 20px;
             color: #333;
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 600;
         }
 
@@ -45,32 +45,17 @@
             color: #333;
             font-size: 16px;
             line-height: 1.5;
-            min-height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            word-wrap: break-word;
-        }
-
-        #qr-code-container {
-            margin-top: 20px;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 150px;
         }
 
         #qr-code {
+            margin-top: 20px;
             max-width: 100%;
+            height: auto;
             border: 2px solid #0072ff;
             border-radius: 8px;
             display: none;
-        }
-
-        #loading-message {
-            color: #0072ff;
-            font-size: 16px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .btn-back {
@@ -91,59 +76,33 @@
             background-color: #005bb5;
         }
 
+        #loading-text {
+            font-size: 16px;
+            color: #333;
+            margin-top: 20px;
+            display: none;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 15px;
                 margin: 10px;
+                width: 100%;
+                box-shadow: none;
             }
 
             h1 {
-                font-size: 18px;
-                margin-bottom: 15px;
+                font-size: 22px;
             }
 
             #result-details {
                 font-size: 14px;
                 padding: 10px;
-                min-height: 80px;
-            }
-
-            #loading-message {
-                font-size: 14px;
             }
 
             .btn-back {
+                padding: 10px 15px;
                 font-size: 14px;
-                padding: 8px 16px;
-            }
-
-            #qr-code-container {
-                height: 120px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            h1 {
-                font-size: 16px;
-            }
-
-            #result-details {
-                font-size: 12px;
-                padding: 8px;
-                min-height: 70px;
-            }
-
-            #loading-message {
-                font-size: 12px;
-            }
-
-            .btn-back {
-                font-size: 12px;
-                padding: 6px 12px;
-            }
-
-            #qr-code-container {
-                height: 100px;
             }
         }
     </style>
@@ -153,10 +112,8 @@
     <div class="container">
         <h1>Detalhes do Participante</h1>
         <div id="result-details">Carregando dados...</div>
-        <div id="qr-code-container">
-            <span id="loading-message">Carregando QR Code...</span>
-            <img id="qr-code" alt="QR Code">
-        </div>
+        <p id="loading-text">Carregando QR Code...</p>
+        <img id="qr-code" alt="QR Code">
         <a href="register.html" class="btn-back">Voltar para Registro</a>
     </div>
     <script>
@@ -191,6 +148,9 @@
                         `;
 
                         const qrCodeElement = document.getElementById('qr-code');
+                        const loadingText = document.getElementById('loading-text');
+                        loadingText.style.display = 'block';
+
                         const qrCodeResponse = await fetch(`https://backend-teste-ebiv.onrender.com/api/participants/${participantId}/qrcode`);
 
                         if (!qrCodeResponse.ok) {
@@ -203,21 +163,24 @@
                         if (qrCodeResult && qrCodeResult.qrCode) {
                             qrCodeElement.src = qrCodeResult.qrCode;
                             qrCodeElement.style.display = 'block';
-                            document.getElementById('loading-message').style.display = 'none';
                         } else {
                             throw new Error('QR Code não encontrado.');
                         }
+
+                        loadingText.style.display = 'none';
                     } else {
                         throw new Error('Dados do participante não encontrados.');
                     }
                 } catch (error) {
                     console.error('Erro:', error);
                     document.getElementById('result-details').textContent = 'Erro ao carregar os dados do participante.';
-                    document.getElementById('loading-message').textContent = 'Erro ao carregar o QR Code.';
+                    document.getElementById('loading-text').style.display = 'none';
+                    document.getElementById('qr-code').style.display = 'none';
                 }
             } else {
                 document.getElementById('result-details').textContent = 'ID do participante não fornecido.';
-                document.getElementById('loading-message').style.display = 'none';
+                document.getElementById('loading-text').style.display = 'none';
+                document.getElementById('qr-code').style.display = 'none';
             }
         });
     </script>
