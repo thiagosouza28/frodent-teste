@@ -1,59 +1,50 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const cadastroInfo = document.getElementById('cadastro-info');
-    const qrCodeContainer = document.getElementById('qr-code-container');
+    const form = document.getElementById('registration-form');
+    const loading = document.getElementById('loading');
+    const result = document.getElementById('result');
+    const resultDetails = document.getElementById('result-details');
     const qrCodeImg = document.getElementById('qr-code');
-    const saveButton = document.getElementById('save-button');
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        loading.style.display = 'block';
+        result.style.display = 'none';
 
-    if (!id) {
-        cadastroInfo.innerHTML = 'ID do participante não fornecido.';
-        return;
-    }
+        const formData = new FormData(form);
+        const data = {
+            name: formData.get('name'),
+            birthDate: formData.get('birthDate'),
+            cpf: formData.get('cpf'),
+            church: formData.get('church'),
+            district: formData.get('district'),
+            whatsapp: formData.get('whatsapp'),
+            acceptTerms: formData.get('acceptTerms') === 'on'
+        };
 
-    async function loadParticipantInfo() {
         try {
-            const response = await fetch(`https://backend-teste-ebiv.onrender.com/api/register/${id}`);
+            const response = await fetch('https://backend-teste-ebiv.onrender.com/api/participants', { // Ajuste a URL se necessário
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
             if (!response.ok) {
-                throw new Error('Erro ao carregar informações do participante.');
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const participant = await response.json();
-            displayParticipantInfo(participant);
+            const resultData = await response.json();
+            resultDetails.textContent = `ID: ${resultData.participant.id}\nNome: ${resultData.participant.name}\nData de Nascimento: ${resultData.participant.birthDate}\nIdade: ${resultData.participant.age}\nCPF: ${resultData.participant.cpf}\nIgreja: ${resultData.participant.church}\nDistrito: ${resultData.participant.district}\nWhatsApp: ${resultData.participant.whatsapp}`;
+            qrCodeImg.src = resultData.qrCode;
+
+            result.style.display = 'block';
         } catch (error) {
             console.error('Erro:', error);
-            cadastroInfo.innerHTML = 'Erro ao carregar informações.';
+            resultDetails.textContent = 'Erro ao realizar o cadastro.';
+            result.style.display = 'block';
+        } finally {
+            loading.style.display = 'none';
         }
-    }
-
-    function displayParticipantInfo(participant) {
-        cadastroInfo.innerHTML = `
-            <h2>Informações do Participante</h2>
-            <p><strong>Nome:</strong> ${participant.name}</p>
-            <p><strong>Data de Nascimento:</strong> ${participant.birthDate}</p>
-            <p><strong>Idade:</strong> ${participant.age}</p>
-            <p><strong>CPF:</strong> ${participant.cpf}</p>
-            <p><strong>Igreja:</strong> ${participant.church}</p>
-            <p><strong>Distrito:</strong> ${participant.district}</p>
-            <p><strong>WhatsApp:</strong> ${participant.whatsapp}</p>
-        `;
-
-        // Gerar e exibir QR Code
-        qrCodeImg.src = `https://backend-teste-ebiv.onrender.com/api/register/${id}/qrcode`;
-        qrCodeContainer.style.display = 'block';
-        saveButton.style.display = 'block';
-    }
-
-    saveButton.addEventListener('click', () => {
-        html2canvas(cadastroInfo).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF();
-            pdf.addImage(imgData, 'PNG', 10, 10);
-            pdf.save('participante.pdf');
-        }).catch(error => console.error('Erro ao gerar PDF:', error));
     });
-
-    loadParticipantInfo();
 });
