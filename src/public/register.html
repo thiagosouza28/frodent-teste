@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Participante</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"],
+        input[type="date"] {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .button {
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            .button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cadastrar Participante</h1>
+        <form id="registration-form">
+            <input type="text" name="name" placeholder="Nome Completo" required>
+            <input type="date" name="birthDate" placeholder="Data de Nascimento" required>
+            <input type="text" name="cpf" placeholder="CPF" required>
+            <input type="text" name="church" placeholder="Igreja" required>
+            <input type="text" name="district" placeholder="Distrito" required>
+            <input type="text" name="whatsapp" placeholder="WhatsApp" required>
+            <label>
+                <input type="checkbox" name="acceptTerms" required> Aceito os termos e condições
+            </label>
+            <button type="submit" class="button">Cadastrar</button>
+        </form>
+        <div id="result-details"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('registration-form');
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+                const data = {
+                    name: formData.get('name'),
+                    birthDate: formData.get('birthDate'),
+                    cpf: formData.get('cpf'),
+                    church: formData.get('church'),
+                    district: formData.get('district'),
+                    whatsapp: formData.get('whatsapp'),
+                    acceptTerms: formData.get('acceptTerms') === 'on'
+                };
+
+                try {
+                    const response = await fetch('https://backend-teste-ebiv.onrender.com/api/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    document.getElementById('result-details').textContent = JSON.stringify(result.participant, null, 2);
+                } catch (error) {
+                    console.error('Erro:', error);
+                    document.getElementById('result-details').textContent = 'Erro ao realizar o cadastro.';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
