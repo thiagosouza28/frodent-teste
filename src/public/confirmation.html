@@ -98,21 +98,26 @@
 
                     const result = await response.json();
 
-                    const participant = result.participant;
-                    const detailsElement = document.getElementById('result-details');
+                    // Verifica se os dados do participante estão presentes
+                    if (result && result.participant) {
+                        const participant = result.participant;
+                        const detailsElement = document.getElementById('result-details');
 
-                    detailsElement.innerHTML = `
-                        <strong>Nome:</strong> ${participant.name}<br>
-                        <strong>Data de Nascimento:</strong> ${participant.birthDate}<br>
-                        <strong>CPF:</strong> ${participant.cpf}<br>
-                        <strong>Igreja:</strong> ${participant.church}<br>
-                        <strong>Distrito:</strong> ${participant.district}<br>
-                        <strong>WhatsApp:</strong> ${participant.whatsapp}<br>
-                    `;
+                        detailsElement.innerHTML = `
+                            <strong>Nome:</strong> ${participant.name}<br>
+                            <strong>Data de Nascimento:</strong> ${participant.birthDate}<br>
+                            <strong>CPF:</strong> ${participant.cpf}<br>
+                            <strong>Igreja:</strong> ${participant.church}<br>
+                            <strong>Distrito:</strong> ${participant.district}<br>
+                            <strong>WhatsApp:</strong> ${participant.whatsapp}<br>
+                        `;
 
-                    const qrCodeElement = document.getElementById('qr-code');
-                    qrCodeElement.src = result.qrCode;
-                    qrCodeElement.style.display = 'block';
+                        const qrCodeElement = document.getElementById('qr-code');
+                        qrCodeElement.src = result.qrCode;
+                        qrCodeElement.style.display = 'block';
+                    } else {
+                        throw new Error('Participante não encontrado.');
+                    }
                 } catch (error) {
                     console.error('Erro:', error);
                     document.getElementById('result-details').textContent = 'Erro ao carregar os dados do participante.';
