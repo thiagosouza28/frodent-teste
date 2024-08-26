@@ -10,7 +10,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(to right, #00c6ff, #0072ff);
+            background: linear-gradient(to right, #a2c2e6, #f1f8e9);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -19,27 +19,26 @@
         }
 
         .container {
-            background-color: #fff;
+            background: #ffffff;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            max-width: 450px;
-            width: 100%;
-            margin: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 90%;
+            width: 400px;
+            margin: 10px;
         }
 
         h1 {
             margin-bottom: 20px;
             color: #333;
-            font-size: 24px;
-            font-weight: 600;
+            font-size: 1.5em;
         }
 
         #result-details {
             text-align: left;
             white-space: pre-wrap;
             margin-top: 20px;
-            background-color: #f9f9f9;
+            background-color: #f4f4f4;
             padding: 15px;
             border-radius: 8px;
             color: #333;
@@ -49,40 +48,22 @@
 
         #qr-code {
             margin-top: 20px;
-            max-width: 100%;
-            border: 2px solid #0072ff;
-            border-radius: 8px;
             display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .btn-back {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #0072ff;
-            border: none;
+            max-width: 100%;
             border-radius: 8px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-back:hover {
-            background-color: #005bb5;
+            justify-content: center;
+            align-items: center;
+            
         }
 
         @media (max-width: 600px) {
             .container {
                 padding: 15px;
-                margin: 10px;
+                max-width: 100%;
             }
 
             h1 {
-                font-size: 20px;
+                font-size: 1.2em;
             }
 
             #result-details {
@@ -97,7 +78,6 @@
         <h1>Detalhes do Participante</h1>
         <div id="result-details">Carregando dados...</div>
         <img id="qr-code" alt="QR Code">
-        <a href="register.html" class="btn-back">Voltar para Registro</a>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
@@ -137,8 +117,24 @@
 
                         const qrCodeElement = document.getElementById('qr-code');
                         // Gere o QR Code para a URL da página de confirmação
-                        qrCodeElement.src = `https://backend-teste-ebiv.onrender.com/api/participants/${participantId}/qrcode`;
-                        qrCodeElement.style.display = 'block';
+                        const qrCodeResponse = await fetch(`https://backend-teste-ebiv.onrender.com/api/participants/${participantId}/qrcode`);
+                        
+                        // Verifique o status da resposta
+                        if (!qrCodeResponse.ok) {
+                            throw new Error(`Erro HTTP! status: ${qrCodeResponse.status}`);
+                        }
+
+                        // Verifique o conteúdo da resposta
+                        const qrCodeResult = await qrCodeResponse.json();
+                        console.log('Resposta da API do QR Code:', qrCodeResult);
+
+                        // Verifique se a resposta contém o QR Code
+                        if (qrCodeResult && qrCodeResult.qrCode) {
+                            qrCodeElement.src = qrCodeResult.qrCode;
+                            qrCodeElement.style.display = 'block';
+                        } else {
+                            throw new Error('QR Code não encontrado.');
+                        }
                     } else {
                         throw new Error('Dados do participante não encontrados.');
                     }
