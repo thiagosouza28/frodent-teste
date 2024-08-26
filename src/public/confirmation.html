@@ -45,16 +45,31 @@
             color: #333;
             font-size: 16px;
             line-height: 1.5;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #qr-code-container {
+            margin-top: 20px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 150px;
         }
 
         #qr-code {
-            margin-top: 20px;
             max-width: 100%;
             border: 2px solid #0072ff;
             border-radius: 8px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+            display: none;
+        }
+
+        #loading-message {
+            color: #0072ff;
+            font-size: 16px;
         }
 
         .btn-back {
@@ -88,6 +103,10 @@
             #result-details {
                 font-size: 14px;
             }
+
+            #loading-message {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -96,32 +115,30 @@
     <div class="container">
         <h1>Detalhes do Participante</h1>
         <div id="result-details">Carregando dados...</div>
-        <img id="qr-code" alt="QR Code">
+        <div id="qr-code-container">
+            <span id="loading-message">Carregando QR Code...</span>
+            <img id="qr-code" alt="QR Code">
+        </div>
         <a href="register.html" class="btn-back">Voltar para Registro</a>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            // Obtém o ID do participante dos parâmetros da URL
             const urlParams = new URLSearchParams(window.location.search);
             const participantId = urlParams.get('id');
 
             if (participantId) {
                 try {
-                    // Verifique se a URL da API está correta
                     console.log(`Buscando dados para o participante com ID: ${participantId}`);
 
                     const response = await fetch(`https://backend-teste-ebiv.onrender.com/api/participants/${participantId}`);
 
-                    // Verifique o status da resposta
                     if (!response.ok) {
                         throw new Error(`Erro HTTP! status: ${response.status}`);
                     }
 
-                    // Verifique o conteúdo da resposta
                     const result = await response.json();
                     console.log('Resposta da API:', result);
 
-                    // Verifique se a resposta contém dados do participante
                     if (result && result.participant) {
                         const participant = result.participant;
                         const detailsElement = document.getElementById('result-details');
@@ -136,22 +153,19 @@
                         `;
 
                         const qrCodeElement = document.getElementById('qr-code');
-                        // Gere o QR Code para a URL da página de confirmação
                         const qrCodeResponse = await fetch(`https://backend-teste-ebiv.onrender.com/api/participants/${participantId}/qrcode`);
-                        
-                        // Verifique o status da resposta
+
                         if (!qrCodeResponse.ok) {
                             throw new Error(`Erro HTTP! status: ${qrCodeResponse.status}`);
                         }
 
-                        // Verifique o conteúdo da resposta
                         const qrCodeResult = await qrCodeResponse.json();
                         console.log('Resposta da API do QR Code:', qrCodeResult);
 
-                        // Verifique se a resposta contém o QR Code
                         if (qrCodeResult && qrCodeResult.qrCode) {
                             qrCodeElement.src = qrCodeResult.qrCode;
                             qrCodeElement.style.display = 'block';
+                            document.getElementById('loading-message').style.display = 'none';
                         } else {
                             throw new Error('QR Code não encontrado.');
                         }
@@ -161,11 +175,11 @@
                 } catch (error) {
                     console.error('Erro:', error);
                     document.getElementById('result-details').textContent = 'Erro ao carregar os dados do participante.';
-                    document.getElementById('qr-code').style.display = 'none';
+                    document.getElementById('loading-message').textContent = 'Erro ao carregar o QR Code.';
                 }
             } else {
                 document.getElementById('result-details').textContent = 'ID do participante não fornecido.';
-                document.getElementById('qr-code').style.display = 'none';
+                document.getElementById('loading-message').style.display = 'none';
             }
         });
     </script>
