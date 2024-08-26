@@ -170,9 +170,13 @@
                     }
 
                     const result = await response.json();
-                    
-                    // Redireciona para a página de confirmação com o ID do participante
-                    window.location.href = `confirmation.html?participantId=${result.participant.id}`;
+
+                    if (result.participant && result.participant.id) {
+                        // Redireciona para a página de confirmação com o ID do participante
+                        window.location.href = `confirmation.html?participantId=${result.participant.id}`;
+                    } else {
+                        throw new Error('ID do participante não encontrado na resposta.');
+                    }
                 } catch (error) {
                     console.error('Erro:', error);
                     document.getElementById('result-details').textContent = 'Erro ao realizar o cadastro.';
