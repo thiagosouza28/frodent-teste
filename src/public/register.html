@@ -170,9 +170,9 @@
                     }
 
                     const result = await response.json();
-                    document.getElementById('result-details').textContent = JSON.stringify(result.participant, null, 2);
-                    document.getElementById('qr-code').src = result.qrCode;
-                    document.getElementById('qr-code').style.display = 'block';
+                    
+                    // Redireciona para a página de confirmação com o ID do participante
+                    window.location.href = `confirmation.html?participantId=${result.participant.id}`;
                 } catch (error) {
                     console.error('Erro:', error);
                     document.getElementById('result-details').textContent = 'Erro ao realizar o cadastro.';
