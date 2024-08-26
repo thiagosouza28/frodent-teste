@@ -45,7 +45,8 @@
             text-align: left;
         }
 
-        input, select {
+        input,
+        select {
             padding: 10px;
             margin-top: 5px;
             border: 1px solid #ccc;
@@ -94,7 +95,8 @@
                 font-size: 16px;
             }
 
-            input, select {
+            input,
+            select {
                 font-size: 14px;
             }
         }
@@ -152,9 +154,10 @@
                     acceptTerms: formData.get('acceptTerms') === 'on'
                 };
 
+                console.log('Dados a serem enviados:', data);
+
                 try {
                     const response = await fetch('https://backend-teste-ebiv.onrender.com/api/participants', {
-
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
