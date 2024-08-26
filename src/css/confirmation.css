@@ -8,72 +8,19 @@ body {
     background-color: #f9f9f9;
 }
 
-h1 {
-    color: #333;
-    margin-top: 20px;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
+.container {
     width: 80%;
-    max-width: 400px;
-    background-color: #fff;
+    max-width: 800px;
+    margin: 20px auto;
     padding: 20px;
+    background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    margin-bottom: 20px;
-}
-
-label {
-    margin-bottom: 5px;
-    color: #555;
-}
-
-input[type="text"],
-input[type="date"],
-input[type="checkbox"],
-button {
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-input[type="checkbox"] {
-    width: auto;
-    margin-right: 10px;
-}
-
-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-#loading, #result {
     text-align: center;
-    margin-top: 20px;
 }
 
-#result-details {
-    text-align: left;
-    white-space: pre-wrap;
-    background-color: #f1f1f1;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-#qr-code {
-    margin-top: 20px;
-    width: 150px;
-    height: 150px;
+h1 {
+    color: #333;
 }
 
 #cadastro-info p {
@@ -81,18 +28,34 @@ button:hover {
     margin: 5px 0;
 }
 
-#cadastro-info span {
-    font-weight: bold;
+#qr-code-container {
+    margin-top: 20px;
+}
+
+#qr-code {
+    width: 150px;
+    height: 150px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#save-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#save-button:hover {
+    background-color: #45a049;
 }
 
 @media screen and (max-width: 600px) {
-    form {
+    .container {
         width: 100%;
         padding: 15px;
-    }
-
-    button {
-        padding: 10px;
-        font-size: 14px;
     }
 }
