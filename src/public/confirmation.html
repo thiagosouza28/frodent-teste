@@ -60,6 +60,17 @@
             background-color: #0056b3;
         }
 
+        #result-details {
+            text-align: left;
+            white-space: pre-wrap;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 8px;
+            color: #333;
+            font-size: 14px;
+        }
+
         #qr-code {
             margin-top: 20px;
             display: none;
@@ -84,7 +95,7 @@
             <input type="text" name="participantId" placeholder="ID do Participante" required>
             <button type="submit" class="button">Consultar</button>
         </form>
-        <pre id="result-details"></pre>
+        <div id="result-details"></div>
         <img id="qr-code" alt="QR Code">
     </div>
     <script>
@@ -106,7 +117,17 @@
 
                     const result = await response.json();
 
-                    document.getElementById('result-details').textContent = JSON.stringify(result.participant, null, 2);
+                    const participant = result.participant;
+                    const detailsElement = document.getElementById('result-details');
+
+                    detailsElement.innerHTML = `
+                        <strong>Nome:</strong> ${participant.name}<br>
+                        <strong>Data de Nascimento:</strong> ${participant.birthDate}<br>
+                        <strong>CPF:</strong> ${participant.cpf}<br>
+                        <strong>Igreja:</strong> ${participant.church}<br>
+                        <strong>Distrito:</strong> ${participant.district}<br>
+                        <strong>WhatsApp:</strong> ${participant.whatsapp}<br>
+                    `;
                     
                     const qrCodeElement = document.getElementById('qr-code');
                     qrCodeElement.src = result.qrCode;
