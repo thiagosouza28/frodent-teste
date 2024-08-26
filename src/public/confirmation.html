@@ -71,15 +71,21 @@
 
             if (participantId) {
                 try {
+                    // Verifique se a URL da API está correta
+                    console.log(`Buscando dados para o participante com ID: ${participantId}`);
+
                     const response = await fetch(`https://backend-teste-ebiv.onrender.com/api/participant/${participantId}`);
 
+                    // Verifique o status da resposta
                     if (!response.ok) {
                         throw new Error(`Erro HTTP! status: ${response.status}`);
                     }
 
+                    // Verifique o conteúdo da resposta
                     const result = await response.json();
+                    console.log('Resposta da API:', result);
 
-                    // Verifica se os dados do participante estão presentes
+                    // Verifique se a resposta contém dados do participante
                     if (result && result.participant) {
                         const participant = result.participant;
                         const detailsElement = document.getElementById('result-details');
@@ -97,7 +103,7 @@
                         qrCodeElement.src = result.qrCode;
                         qrCodeElement.style.display = 'block';
                     } else {
-                        throw new Error('Participante não encontrado.');
+                        throw new Error('Dados do participante não encontrados.');
                     }
                 } catch (error) {
                     console.error('Erro:', error);
