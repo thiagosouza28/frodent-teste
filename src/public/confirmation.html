@@ -197,19 +197,33 @@
         });
 
         function saveAsPDF() {
-            // Implementação para salvar como PDF
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            const resultDetails = document.getElementById('result-details').innerText;
+            const detailsElement = document.getElementById('result-details');
             const qrCodeElement = document.getElementById('qr-code');
             const qrCodeDataUrl = qrCodeElement.src;
 
-            doc.text(resultDetails, 10, 10);
+            // Adicionar título
+            doc.setFontSize(22);
+            doc.text('Detalhes do Participante', 10, 10);
 
+            // Adicionar detalhes do participante
+            doc.setFontSize(16);
+            doc.setTextColor(0, 0, 0);
+            const details = detailsElement.innerText
+                .replace('Data de Nascimento:', 'Data de Nascimento: ')
+                .replace(/(\d{4}-\d{2}-\d{2})/, (match) => {
+                    const date = new Date(match);
+                    return date.toLocaleDateString('pt-BR');
+                });
+            doc.text(details, 10, 20);
+
+            // Adicionar QR Code
             if (qrCodeDataUrl) {
-                doc.addImage(qrCodeDataUrl, 'PNG', 10, 40, 50, 50); // Ajuste o tamanho conforme necessário
+                doc.addImage(qrCodeDataUrl, 'PNG', 10, 50, 50, 50); // Ajuste o tamanho conforme necessário
             }
 
+            // Salvar PDF
             doc.save('comprovante_inscricao.pdf');
         }
     </script>
