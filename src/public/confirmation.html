@@ -4,106 +4,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciamento de Sistema</title>
+    <title>Consulta de Participante</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #007bff, #00d4ff);
             margin: 0;
             padding: 0;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
             text-align: center;
-            color: #333;
         }
 
         .container {
             background-color: #fff;
-            padding: 30px;
+            padding: 20px;
             border-radius: 12px;
-            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 450px;
             width: 100%;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .container:hover {
-            transform: translateY(-5px);
+            margin: 20px;
         }
 
         h1 {
             margin-bottom: 20px;
-            font-size: 28px;
-            color: #007bff;
+            color: #333;
+            font-size: 24px;
+            font-weight: 600;
         }
 
-        .button {
-            display: block;
-            margin: 15px 0;
-            padding: 15px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 20px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .button:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-
-        .loading-message {
-            font-size: 16px;
-            color: #555;
-            margin-top: 10px;
-            display: none; /* Escondido por padrão */
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
+        #result-details {
+            text-align: left;
+            white-space: pre-wrap;
             margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            color: #333;
+            font-size: 16px;
+            line-height: 1.5;
         }
 
-        .qr-code {
+        #qr-code {
+            margin-top: 20px;
+            max-width: 100%;
+            border: 2px solid #0072ff;
+            border-radius: 8px;
             display: block;
-            margin: 0 auto;
-            max-width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #0072ff;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #005bb5;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            #result-details {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Gerenciamento de Sistema</h1>
-        <a href="src/public/register.html" class="button">Cadastrar Novo Participante</a>
-        <a href="src/public/gerenciar_cadastros.html" class="button">Gerenciar Cadastros</a>
-        <div class="loading-message" id="loadingMessage">Carregando...</div>
-        <img src="" alt="QR Code" id="qrCode" class="qr-code">
+        <h1>Detalhes do Participante</h1>
+        <div id="result-details">Carregando dados...</div>
+        <img id="qr-code" alt="QR Code">
+        <a href="register.html" class="btn-back">Voltar para Registro</a>
     </div>
-
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const qrCodeImg = document.getElementById('qrCode');
-            const loadingMessage = document.getElementById('loadingMessage');
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Obtém o ID do participante dos parâmetros da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const participantId = urlParams.get('id');
 
-            loadingMessage.style.display = 'block'; // Exibe a mensagem de carregamento
+            if (participantId) {
+                try {
+                    // Verifique se a URL da API está correta
+                    console.log(`Buscando dados para o participante com ID: ${participantId}`);
 
-            // Simula o carregamento do QR Code
-            setTimeout(() => {
-                qrCodeImg.src = 'https://via.placeholder.com/200'; // Exemplo de URL de QR Code
-                qrCodeImg.onload = () => {
-                    loadingMessage.style.display = 'none'; // Esconde a mensagem de carregamento
-                };
-                qrCodeImg.onerror = () => {
-                    loadingMessage.innerHTML = 'Erro ao carregar QR Code. Tente novamente.';
-                };
-            }, 2000); // Simulação de 2 segundos de carregamento
+                    const response = await fetch(`https://backend-teste-ebiv.onrender.com/api/participants/${participantId}`);
+
+                    // Verifique o status da resposta
+                    if (!response.ok) {
+                        throw new Error(`Erro HTTP! status: ${response.status}`);
+                    }
+
+                    // Verifique o conteúdo da resposta
+                    const result = await response.json();
+                    console.log('Resposta da API:', result);
+
+                    // Verifique se a resposta contém dados do participante
+                    if (result && result.participant) {
+                        const participant = result.participant;
+                        const detailsElement = document.getElementById('result-details');
+
+                        detailsElement.innerHTML = `
+                            <strong>Nome:</strong> ${participant.name}<br>
+                            <strong>Data de Nascimento:</strong> ${participant.birthDate}<br>
+                            <strong>CPF:</strong> ${participant.cpf}<br>
+                            <strong>Igreja:</strong> ${participant.church}<br>
+                            <strong>Distrito:</strong> ${participant.district}<br>
+                            <strong>WhatsApp:</strong> ${participant.whatsapp}<br>
+                        `;
+
+                        const qrCodeElement = document.getElementById('qr-code');
+                        // Gere o QR Code para a URL da página de confirmação
+                        const qrCodeResponse = await fetch(`https://backend-teste-ebiv.onrender.com/api/participants/${participantId}/qrcode`);
+                        
+                        // Verifique o status da resposta
+                        if (!qrCodeResponse.ok) {
+                            throw new Error(`Erro HTTP! status: ${qrCodeResponse.status}`);
+                        }
+
+                        // Verifique o conteúdo da resposta
+                        const qrCodeResult = await qrCodeResponse.json();
+                        console.log('Resposta da API do QR Code:', qrCodeResult);
+
+                        // Verifique se a resposta contém o QR Code
+                        if (qrCodeResult && qrCodeResult.qrCode) {
+                            qrCodeElement.src = qrCodeResult.qrCode;
+                            qrCodeElement.style.display = 'block';
+                        } else {
+                            throw new Error('QR Code não encontrado.');
+                        }
+                    } else {
+                        throw new Error('Dados do participante não encontrados.');
+                    }
+                } catch (error) {
+                    console.error('Erro:', error);
+                    document.getElementById('result-details').textContent = 'Erro ao carregar os dados do participante.';
+                    document.getElementById('qr-code').style.display = 'none';
+                }
+            } else {
+                document.getElementById('result-details').textContent = 'ID do participante não fornecido.';
+                document.getElementById('qr-code').style.display = 'none';
+            }
         });
     </script>
 </body>
