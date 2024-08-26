@@ -126,7 +126,7 @@
         <p id="loading-text">Carregando QR Code...</p>
         <img id="qr-code" alt="QR Code">
         <a href="register.html" class="btn-back">Voltar para Registro</a>
-        <button id="btn-save" class="btn-save">Salvar como PDF</button>
+        <button class="btn-save-pdf" onclick="saveAsPDF()">Salvar como PDF</button>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
@@ -150,12 +150,9 @@
                         const participant = result.participant;
                         const detailsElement = document.getElementById('result-details');
 
-                        const birthDate = new Date(participant.birthDate);
-                        const formattedBirthDate = birthDate.toLocaleDateString('pt-BR');
-
                         detailsElement.innerHTML = `
                             <strong>Nome:</strong> ${participant.name}<br>
-                            <strong>Data de Nascimento:</strong> ${formattedBirthDate}<br>
+                            <strong>Data de Nascimento:</strong> ${participant.birthDate}<br>
                             <strong>CPF:</strong> ${participant.cpf}<br>
                             <strong>Igreja:</strong> ${participant.church}<br>
                             <strong>Distrito:</strong> ${participant.district}<br>
@@ -197,22 +194,26 @@
                 document.getElementById('loading-text').style.display = 'none';
                 document.getElementById('qr-code').style.display = 'none';
             }
-
-            // Função para salvar como PDF
-            document.getElementById('btn-save').addEventListener('click', () => {
-                const element = document.querySelector('.container');
-                const opt = {
-                    margin: 1,
-                    filename: `comprovante_${participantId}.pdf`,
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2 },
-                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-                };
-                html2pdf().from(element).set(opt).save();
-            });
         });
+
+        function saveAsPDF() {
+            // Implementação para salvar como PDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const resultDetails = document.getElementById('result-details').innerText;
+            const qrCodeElement = document.getElementById('qr-code');
+            const qrCodeDataUrl = qrCodeElement.src;
+
+            doc.text(resultDetails, 10, 10);
+
+            if (qrCodeDataUrl) {
+                doc.addImage(qrCodeDataUrl, 'PNG', 10, 40, 50, 50); // Ajuste o tamanho conforme necessário
+            }
+
+            doc.save('comprovante_inscricao.pdf');
+        }
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
 
 </html>
