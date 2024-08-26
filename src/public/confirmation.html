@@ -217,17 +217,22 @@
                 .replace('Data de Nascimento:', 'Data de Nascimento: ')
                 .replace(/(\d{4}-\d{2}-\d{2})/, (match) => {
                     const date = new Date(match);
-                    return date.toLocaleDateString('pt-BR');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const year = date.getFullYear();
+                    return `${day}/${month}/${year}`;
                 });
             doc.text(details, 10, 30);
 
-            // Adicionar QR Code com borda verde
+            // Adicionar QR Code com borda verde e centralizá-lo
             if (qrCodeDataUrl) {
                 const qrCodeWidth = 50;
                 const qrCodeHeight = 50;
+                const pageWidth = doc.internal.pageSize.width;
+                const qrCodeX = (pageWidth - qrCodeWidth) / 2;
                 doc.setDrawColor(50, 205, 50); // Cor da borda verde
-                doc.rect(10, 50, qrCodeWidth, qrCodeHeight); // Borda verde
-                doc.addImage(qrCodeDataUrl, 'PNG', 10, 50, qrCodeWidth, qrCodeHeight);
+                doc.rect(qrCodeX - 1, 50 - 1, qrCodeWidth + 2, qrCodeHeight + 2); // Borda verde
+                doc.addImage(qrCodeDataUrl, 'PNG', qrCodeX, 50, qrCodeWidth, qrCodeHeight);
             }
 
             // Salvar PDF
