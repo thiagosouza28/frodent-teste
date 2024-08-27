@@ -191,7 +191,6 @@
         }
     </style>
 </head>
-
 <body>
     <h1>Gerenciamento de Inscrições</h1>
     <div class="container">
@@ -306,7 +305,8 @@
         function editParticipant(id) {
             fetch(`https://backend-teste-ebiv.onrender.com/api/participants/${id}`)
                 .then(response => response.json())
-                .then(participant => {
+                .then(data => {
+                    const participant = data.participant;
                     document.getElementById('edit-id').value = participant.id;
                     document.getElementById('edit-name').value = participant.name;
                     document.getElementById('edit-birthDate').value = participant.birthDate.split('T')[0];
