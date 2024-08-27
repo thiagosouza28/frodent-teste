@@ -250,6 +250,9 @@
             const detailsElement = document.getElementById('result-details');
             const qrCodeElement = document.getElementById('qr-code');
             const qrCodeDataUrl = qrCodeElement.src;
+            const urlParams = new URLSearchParams(window.location.search);
+            const participantId = urlParams.get('id');
+            const participantName = detailsElement.querySelector('strong').nextSibling.nodeValue.trim().replace(/\s+/g, '_'); // Extrair o nome do participante
 
             // Função para formatar a data no formato dd/mm/aaaa
             function formatDate(dateString) {
@@ -258,11 +261,11 @@
             }
 
             // Adicionar título
-            doc.setFontSize(22);
+            doc.setFontSize(24);
             doc.setTextColor(255, 255, 255); // Texto branco para o título
             doc.setFillColor(50, 205, 50); // Cor de fundo verde claro
-            doc.rect(0, 0, 210, 20, 'F'); // Fundo verde claro
-            doc.text('Detalhes do Participante', 10, 15);
+            doc.rect(0, 0, 210, 25, 'F'); // Fundo verde claro
+            doc.text('Detalhes do Participante', 10, 20);
 
             // Adicionar detalhes do participante
             doc.setFontSize(16);
@@ -271,21 +274,22 @@
                 .replace(/Data de Nascimento: (\d{4}-\d{2}-\d{2})/, (match, p1) => {
                     return `Data de Nascimento: ${formatDate(p1)}`;
                 });
-            doc.text(details, 10, 30);
+            doc.text(details, 10, 35);
 
             // Adicionar QR Code com borda verde
             if (qrCodeDataUrl) {
                 const qrCodeWidth = 50;
                 const qrCodeHeight = 50;
                 const qrCodeX = (doc.internal.pageSize.width - qrCodeWidth) / 2; // Centralizar QR Code
-                const qrCodeY = 60; // Espaço entre informações e QR Code
+                const qrCodeY = 75; // Espaço entre informações e QR Code
                 doc.setDrawColor(50, 205, 50); // Cor da borda verde
-                doc.rect(qrCodeX, qrCodeY, qrCodeWidth, qrCodeHeight); // Borda verde
+                doc.rect(qrCodeX - 2, qrCodeY - 2, qrCodeWidth + 4, qrCodeHeight + 4); // Borda verde
                 doc.addImage(qrCodeDataUrl, 'PNG', qrCodeX, qrCodeY, qrCodeWidth, qrCodeHeight);
             }
 
             // Salvar PDF
-            doc.save('comprovante_inscricao.pdf');
+            const fileName = `comprovante_inscricao_${participantId}_${participantName}.pdf`.replace(/\s+/g, '_'); // Substituir espaços por underline
+            doc.save(fileName);
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
