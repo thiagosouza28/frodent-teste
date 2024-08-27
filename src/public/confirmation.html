@@ -56,7 +56,6 @@
             display: none;
             margin-left: auto;
             margin-right: auto;
-            text-align: center;
         }
 
         .btn-back, .btn-save-pdf {
@@ -225,16 +224,15 @@
                 });
             doc.text(details, 10, 30);
 
-            // Adicionar QR Code com borda verde e centralizá-lo abaixo das informações
+            // Adicionar QR Code com borda verde e centralizá-lo
             if (qrCodeDataUrl) {
                 const qrCodeWidth = 50;
                 const qrCodeHeight = 50;
                 const pageWidth = doc.internal.pageSize.width;
                 const qrCodeX = (pageWidth - qrCodeWidth) / 2;
-                const infoHeight = 30 + doc.internal.getTextDimensions(details).h;
                 doc.setDrawColor(50, 205, 50); // Cor da borda verde
-                doc.rect(qrCodeX - 1, infoHeight + 10 - 1, qrCodeWidth + 2, qrCodeHeight + 2); // Borda verde
-                doc.addImage(qrCodeDataUrl, 'PNG', qrCodeX, infoHeight + 10, qrCodeWidth, qrCodeHeight);
+                doc.rect(qrCodeX - 1, 50 - 1, qrCodeWidth + 2, qrCodeHeight + 2); // Borda verde
+                doc.addImage(qrCodeDataUrl, 'PNG', qrCodeX, 50, qrCodeWidth, qrCodeHeight);
             }
 
             // Salvar PDF
