@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -123,6 +122,7 @@
             border-radius: 8px;
             max-width: 500px;
             width: 90%;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         }
 
         .modal-content h2 {
@@ -171,14 +171,6 @@
         }
 
         .confirm-button:hover {
-            background-color: #c82333;
-        }
-
-        .modal-content .confirm-button {
-            background-color: #dc3545;
-        }
-
-        .modal-content .confirm-button:hover {
             background-color: #c82333;
         }
 
@@ -271,6 +263,8 @@
                 const participants = await response.json();
 
                 const participantsList = document.getElementById('participants-list');
+                participantsList.innerHTML = ''; // Clear existing rows
+
                 participants.forEach(participant => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
@@ -315,7 +309,7 @@
                 .then(participant => {
                     document.getElementById('edit-id').value = participant.id;
                     document.getElementById('edit-name').value = participant.name;
-                    document.getElementById('edit-birthDate').value = participant.birthDate;
+                    document.getElementById('edit-birthDate').value = participant.birthDate.split('T')[0];
                     document.getElementById('edit-cpf').value = participant.cpf;
                     document.getElementById('edit-church').value = participant.church;
                     document.getElementById('edit-district').value = participant.district;
@@ -390,5 +384,4 @@
         }
     </script>
 </body>
-
 </html>
