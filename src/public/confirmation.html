@@ -143,16 +143,16 @@
 <body>
     <div class="container">
         <h1>Detalhes do Participante</h1>
-        <div id="result-details">Carregando dados...</div>
-        <p id="loading-text">Carregando QR Code...</p>
+        <div id="result-details"></div>
+        <p id="loading-text">Carregando...</p>
         <div id="loading-indicator">
-            <img src="loading.gif" alt="Carregando..."> <!-- Substitua "loading.gif" pela sua imagem de carregamento -->
+            <img src="../img/loading.gif" alt="Carregando...">
         </div>
         <img id="qr-code" alt="QR Code">
         <p id="not-found-message">Participante não encontrado.</p>
         <div class="btn-container">
             <a href="register.html" class="btn-back">Voltar para Registro</a>
-            <button class="btn-save-pdf" onclick="saveAsPDF()">Salvar como PDF</button>
+            <button class="btn-save-pdf" onclick="saveAsPDF()">Salvar comprovante</button>
         </div>
     </div>
     <script>
@@ -180,9 +180,22 @@
                             return `${day}/${month}/${year}`;
                         }
 
+                        // Função para calcular a idade
+                        function calculateAge(birthDateString) {
+                            const birthDate = new Date(birthDateString);
+                            const today = new Date();
+                            let age = today.getFullYear() - birthDate.getFullYear();
+                            const monthDifference = today.getMonth() - birthDate.getMonth();
+                            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+                                age--;
+                            }
+                            return age;
+                        }
+
                         detailsElement.innerHTML = `
                             <strong>Nome:</strong> ${participant.name}<br>
                             <strong>Data de Nascimento:</strong> ${formatDate(participant.birthDate)}<br>
+                            <strong>Idade:</strong> ${calculateAge(participant.birthDate)} anos<br>
                             <strong>CPF:</strong> ${participant.cpf}<br>
                             <strong>Igreja:</strong> ${participant.church}<br>
                             <strong>Distrito:</strong> ${participant.district}<br>
