@@ -97,6 +97,13 @@
             display: none;
         }
 
+        #not-found-message {
+            font-size: 18px;
+            color: red;
+            margin-top: 20px;
+            display: none;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 15px;
@@ -127,6 +134,7 @@
         <h1>Detalhes do Participante</h1>
         <div id="result-details">Carregando dados...</div>
         <p id="loading-text">Carregando QR Code...</p>
+        <p id="not-found-message">Participante não encontrado.</p>
         <img id="qr-code" alt="QR Code">
         <div class="btn-container">
             <a href="register.html" class="btn-back">Voltar para Registro</a>
@@ -192,14 +200,17 @@
                     }
                 } catch (error) {
                     console.error('Erro:', error);
-                    document.getElementById('result-details').textContent = 'Erro ao carregar os dados do participante.';
+                    document.getElementById('result-details').style.display = 'none';
                     document.getElementById('loading-text').style.display = 'none';
                     document.getElementById('qr-code').style.display = 'none';
+                    document.getElementById('not-found-message').style.display = 'block';
                 }
             } else {
-                document.getElementById('result-details').textContent = 'ID do participante não fornecido.';
+                document.getElementById('result-details').style.display = 'none';
                 document.getElementById('loading-text').style.display = 'none';
                 document.getElementById('qr-code').style.display = 'none';
+                document.getElementById('not-found-message').textContent = 'ID do participante não fornecido.';
+                document.getElementById('not-found-message').style.display = 'block';
             }
         });
 
