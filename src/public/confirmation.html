@@ -56,9 +56,14 @@
             margin: 0 auto; /* Centralizar o QR Code */
         }
 
-        .btn-back, .btn-save-pdf {
-            display: inline-block;
+        .btn-container {
+            display: flex;
+            justify-content: center; /* Centralizar os botões horizontalmente */
+            gap: 10px; /* Espaço entre os botões */
             margin-top: 20px;
+        }
+
+        .btn-back, .btn-save-pdf {
             padding: 10px 20px;
             font-size: 16px;
             color: #fff;
@@ -123,8 +128,10 @@
         <div id="result-details">Carregando dados...</div>
         <p id="loading-text">Carregando QR Code...</p>
         <img id="qr-code" alt="QR Code">
-        <a href="register.html" class="btn-back">Voltar para Registro</a>
-        <button class="btn-save-pdf" onclick="saveAsPDF()">Salvar como PDF</button>
+        <div class="btn-container">
+            <a href="register.html" class="btn-back">Voltar para Registro</a>
+            <button class="btn-save-pdf" onclick="saveAsPDF()">Salvar como PDF</button>
+        </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
