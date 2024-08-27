@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -104,6 +105,17 @@
             text-align: center; /* Centralizar o texto quando não encontrado */
         }
 
+        #loading-indicator {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #loading-indicator img {
+            width: 50px;
+            height: 50px;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 15px;
@@ -134,8 +146,11 @@
         <h1>Detalhes do Participante</h1>
         <div id="result-details">Carregando dados...</div>
         <p id="loading-text">Carregando QR Code...</p>
-        <p id="not-found-message">Participante não encontrado.</p>
+        <div id="loading-indicator">
+            <img src="loading.gif" alt="Carregando..."> <!-- Substitua "loading.gif" pela sua imagem de carregamento -->
+        </div>
         <img id="qr-code" alt="QR Code">
+        <p id="not-found-message">Participante não encontrado.</p>
         <div class="btn-container">
             <a href="register.html" class="btn-back">Voltar para Registro</a>
             <button class="btn-save-pdf" onclick="saveAsPDF()">Salvar como PDF</button>
@@ -177,7 +192,10 @@
 
                         const qrCodeElement = document.getElementById('qr-code');
                         const loadingText = document.getElementById('loading-text');
+                        const loadingIndicator = document.getElementById('loading-indicator');
+
                         loadingText.style.display = 'block';
+                        loadingIndicator.style.display = 'block';
 
                         const qrCodeResponse = await fetch(`https://backend-teste-ebiv.onrender.com/api/participants/${participantId}/qrcode`);
 
@@ -195,6 +213,7 @@
                         }
 
                         loadingText.style.display = 'none';
+                        loadingIndicator.style.display = 'none';
                     } else {
                         throw new Error('Dados do participante não encontrados.');
                     }
@@ -202,6 +221,7 @@
                     console.error('Erro:', error);
                     document.getElementById('result-details').style.display = 'none';
                     document.getElementById('loading-text').style.display = 'none';
+                    document.getElementById('loading-indicator').style.display = 'none';
                     document.getElementById('qr-code').style.display = 'none';
                     document.getElementById('not-found-message').style.display = 'block';
                     document.querySelector('.btn-container').style.display = 'none'; // Ocultar os botões
@@ -209,6 +229,7 @@
             } else {
                 document.getElementById('result-details').style.display = 'none';
                 document.getElementById('loading-text').style.display = 'none';
+                document.getElementById('loading-indicator').style.display = 'none';
                 document.getElementById('qr-code').style.display = 'none';
                 document.getElementById('not-found-message').textContent = 'ID do participante não fornecido.';
                 document.getElementById('not-found-message').style.display = 'block';
@@ -262,4 +283,5 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
+
 </html>
