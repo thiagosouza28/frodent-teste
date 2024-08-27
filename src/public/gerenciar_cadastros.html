@@ -185,7 +185,7 @@
 </head>
 
 <body>
-    <h1>Gerenciar Cadastros</h1>
+    <h1>Gerenciamento de Inscrições</h1>
     <div class="container">
         <table>
             <thead>
@@ -335,17 +335,19 @@
         }
 
         function deleteParticipant(id) {
-            fetch(`https://backend-teste-ebiv.onrender.com/api/participants/${id}`, {
-                method: 'DELETE'
-            })
-            .then(() => {
-                alert('Participante excluído com sucesso!');
-                location.reload(); // Recarrega a página para atualizar a lista
-            })
-            .catch(error => {
-                console.error('Erro ao excluir participante:', error);
-                alert('Erro ao excluir participante.');
-            });
+            if (confirm('Tem certeza de que deseja excluir este participante?')) {
+                fetch(`https://backend-teste-ebiv.onrender.com/api/participants/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(() => {
+                    alert('Participante excluído com sucesso!');
+                    location.reload(); // Recarrega a página para atualizar a lista
+                })
+                .catch(error => {
+                    console.error('Erro ao excluir participante:', error);
+                    alert('Erro ao excluir participante.');
+                });
+            }
         }
     </script>
 </body>
