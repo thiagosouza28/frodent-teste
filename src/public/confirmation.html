@@ -26,7 +26,7 @@
             max-width: 450px;
             width: 90%;
             margin: 20px;
-            text-align: left; /* Alinhar todo o texto à esquerda */
+            text-align: left; /* Alinhar todo o texto à esquerda quando os dados estão presentes */
         }
 
         h1 {
@@ -102,6 +102,7 @@
             color: red;
             margin-top: 20px;
             display: none;
+            text-align: center; /* Centralizar o texto quando não encontrado */
         }
 
         @media (max-width: 600px) {
@@ -204,6 +205,7 @@
                     document.getElementById('loading-text').style.display = 'none';
                     document.getElementById('qr-code').style.display = 'none';
                     document.getElementById('not-found-message').style.display = 'block';
+                    document.querySelector('.btn-container').style.display = 'none'; // Ocultar os botões
                 }
             } else {
                 document.getElementById('result-details').style.display = 'none';
@@ -211,6 +213,7 @@
                 document.getElementById('qr-code').style.display = 'none';
                 document.getElementById('not-found-message').textContent = 'ID do participante não fornecido.';
                 document.getElementById('not-found-message').style.display = 'block';
+                document.querySelector('.btn-container').style.display = 'none'; // Ocultar os botões
             }
         });
 
