@@ -166,6 +166,22 @@
             background-color: #5a6268;
         }
 
+        .confirm-button {
+            background-color: #dc3545;
+        }
+
+        .confirm-button:hover {
+            background-color: #c82333;
+        }
+
+        .modal-content .confirm-button {
+            background-color: #dc3545;
+        }
+
+        .modal-content .confirm-button:hover {
+            background-color: #c82333;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 15px;
@@ -231,12 +247,24 @@
                 <input type="tel" id="edit-whatsapp" name="whatsapp" required>
 
                 <button type="submit" class="save-button">Salvar</button>
-                <button type="button" class="cancel-button" onclick="closeModal()">Cancelar</button>
+                <button type="button" class="cancel-button" onclick="closeEditModal()">Cancelar</button>
             </form>
         </div>
     </div>
 
+    <!-- Modal de Confirmação de Exclusão -->
+    <div id="delete-confirmation-modal" class="modal">
+        <div class="modal-content">
+            <h2>Confirmação de Exclusão</h2>
+            <p>Você tem certeza de que deseja excluir este participante?</p>
+            <button id="confirm-delete" class="confirm-button">Excluir</button>
+            <button class="cancel-button" onclick="closeDeleteConfirmationModal()">Cancelar</button>
+        </div>
+    </div>
+
     <script>
+        let participantIdToDelete = null;
+
         document.addEventListener('DOMContentLoaded', async () => {
             try {
                 const response = await fetch('https://backend-teste-ebiv.onrender.com/api/participants');
@@ -257,7 +285,7 @@
                             <div class="action-buttons">
                                 <a href="confirmation.html?id=${participant.id}" class="proof-button">Comprovante</a>
                                 <button class="edit-button" onclick="editParticipant('${participant.id}')">Editar</button>
-                                <button class="delete-button" onclick="deleteParticipant('${participant.id}')">Excluir</button>
+                                <button class="delete-button" onclick="confirmDeleteParticipant('${participant.id}')">Excluir</button>
                             </div>
                         </td>
                     `;
@@ -278,7 +306,7 @@
         }
 
         function formatPhone(phone) {
-            return phone.replace(/(\d{2})(\d{4,5})(\d{4})/, '($1) $2-$3');
+            return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
         }
 
         function editParticipant(id) {
@@ -330,24 +358,35 @@
             });
         });
 
-        function closeModal() {
+        function closeEditModal() {
             document.getElementById('edit-modal').style.display = 'none';
         }
 
-        function deleteParticipant(id) {
-            if (confirm('Tem certeza de que deseja excluir este participante?')) {
-                fetch(`https://backend-teste-ebiv.onrender.com/api/participants/${id}`, {
+        function confirmDeleteParticipant(id) {
+            participantIdToDelete = id;
+            document.getElementById('delete-confirmation-modal').style.display = 'flex';
+        }
+
+        document.getElementById('confirm-delete').addEventListener('click', () => {
+            if (participantIdToDelete) {
+                fetch(`https://backend-teste-ebiv.onrender.com/api/participants/${participantIdToDelete}`, {
                     method: 'DELETE'
                 })
                 .then(() => {
                     alert('Participante excluído com sucesso!');
+                    document.getElementById('delete-confirmation-modal').style.display = 'none';
                     location.reload(); // Recarrega a página para atualizar a lista
                 })
                 .catch(error => {
                     console.error('Erro ao excluir participante:', error);
                     alert('Erro ao excluir participante.');
+                    document.getElementById('delete-confirmation-modal').style.display = 'none';
                 });
             }
+        });
+
+        function closeDeleteConfirmationModal() {
+            document.getElementById('delete-confirmation-modal').style.display = 'none';
         }
     </script>
 </body>
