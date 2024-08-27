@@ -152,9 +152,15 @@
                         const participant = result.participant;
                         const detailsElement = document.getElementById('result-details');
 
+                        // Função para formatar a data no formato dd/mm/aaaa
+                        function formatDate(dateString) {
+                            const [year, month, day] = dateString.split('-');
+                            return `${day}/${month}/${year}`;
+                        }
+
                         detailsElement.innerHTML = `
                             <strong>Nome:</strong> ${participant.name}<br>
-                            <strong>Data de Nascimento:</strong> ${new Date(participant.birthDate).toLocaleDateString('pt-BR')}<br>
+                            <strong>Data de Nascimento:</strong> ${formatDate(participant.birthDate)}<br>
                             <strong>CPF:</strong> ${participant.cpf}<br>
                             <strong>Igreja:</strong> ${participant.church}<br>
                             <strong>Distrito:</strong> ${participant.district}<br>
@@ -204,6 +210,12 @@
             const qrCodeElement = document.getElementById('qr-code');
             const qrCodeDataUrl = qrCodeElement.src;
 
+            // Função para formatar a data no formato dd/mm/aaaa
+            function formatDate(dateString) {
+                const [year, month, day] = dateString.split('-');
+                return `${day}/${month}/${year}`;
+            }
+
             // Adicionar título
             doc.setFontSize(22);
             doc.setTextColor(255, 255, 255); // Texto branco para o título
@@ -215,10 +227,8 @@
             doc.setFontSize(16);
             doc.setTextColor(0, 0, 0); // Texto preto
             const details = detailsElement.innerText
-                .replace('Data de Nascimento:', 'Data de Nascimento: ')
-                .replace(/(\d{4}-\d{2}-\d{2})/, (match) => {
-                    const date = new Date(match);
-                    return date.toLocaleDateString('pt-BR');
+                .replace(/Data de Nascimento: (\d{4}-\d{2}-\d{2})/, (match, p1) => {
+                    return `Data de Nascimento: ${formatDate(p1)}`;
                 });
             doc.text(details, 10, 30);
 
