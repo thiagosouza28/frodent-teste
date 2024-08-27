@@ -48,7 +48,7 @@
         }
 
         #qr-code {
-            display: block;
+            display: none; /* Ocultar o QR Code inicialmente */
             max-width: 100%;
             height: auto;
             border: 2px solid #32cd32; /* Borda verde para combinar com o tema */
@@ -106,7 +106,6 @@
         }
 
         #loading-indicator {
-            display: none;
             text-align: center;
             margin-top: 20px;
         }
@@ -207,13 +206,21 @@
 
                         if (qrCodeResult && qrCodeResult.qrCode) {
                             qrCodeElement.src = qrCodeResult.qrCode;
-                            qrCodeElement.style.display = 'block';
+                            qrCodeElement.onload = () => {
+                                qrCodeElement.style.display = 'block';
+                                loadingText.style.display = 'none';
+                                loadingIndicator.style.display = 'none';
+                            };
+                            qrCodeElement.onerror = () => {
+                                loadingText.style.display = 'none';
+                                loadingIndicator.style.display = 'none';
+                                qrCodeElement.style.display = 'none';
+                                document.getElementById('not-found-message').textContent = 'QR Code não carregado.';
+                                document.getElementById('not-found-message').style.display = 'block';
+                            };
                         } else {
                             throw new Error('QR Code não encontrado.');
                         }
-
-                        loadingText.style.display = 'none';
-                        loadingIndicator.style.display = 'none';
                     } else {
                         throw new Error('Dados do participante não encontrados.');
                     }
