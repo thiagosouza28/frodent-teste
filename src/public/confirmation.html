@@ -26,6 +26,7 @@
             max-width: 450px;
             width: 90%;
             margin: 20px;
+            text-align: left; /* Alinhar todo o texto à esquerda */
         }
 
         h1 {
@@ -33,30 +34,26 @@
             color: #333;
             font-size: 24px;
             font-weight: 600;
+            text-align: center; /* Título centralizado */
         }
 
         #result-details {
-    text-align: left; /* Alinhando o texto à esquerda */
-    white-space: pre-wrap;
-    margin-top: 10px; /* Reduzido para menos espaço acima */
-    background-color: #f9f9f9;
-    padding: 10px; /* Ajustado para um padding adequado */
-    border-radius: 8px;
-    color: #333;
-    font-size: 16px;
-    line-height: 1.4; /* Ajustado para um espaçamento mais compacto */
-}
-
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 8px;
+            color: #333;
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
 
         #qr-code {
-            margin-top: 20px;
+            display: block;
             max-width: 100%;
             height: auto;
             border: 2px solid #32cd32; /* Borda verde para combinar com o tema */
             border-radius: 8px;
-            display: none;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto; /* Centralizar o QR Code */
         }
 
         .btn-back, .btn-save-pdf {
@@ -136,8 +133,6 @@
 
             if (participantId) {
                 try {
-                    console.log(`Buscando dados para o participante com ID: ${participantId}`);
-
                     const response = await fetch(`https://backend-teste-ebiv.onrender.com/api/participants/${participantId}`);
 
                     if (!response.ok) {
@@ -145,7 +140,6 @@
                     }
 
                     const result = await response.json();
-                    console.log('Resposta da API:', result);
 
                     if (result && result.participant) {
                         const participant = result.participant;
@@ -153,7 +147,7 @@
 
                         detailsElement.innerHTML = `
                             <strong>Nome:</strong> ${participant.name}<br>
-                            <strong>Data de Nascimento:</strong> ${participant.birthDate}<br>
+                            <strong>Data de Nascimento:</strong> ${new Date(participant.birthDate).toLocaleDateString('pt-BR')}<br>
                             <strong>CPF:</strong> ${participant.cpf}<br>
                             <strong>Igreja:</strong> ${participant.church}<br>
                             <strong>Distrito:</strong> ${participant.district}<br>
@@ -171,7 +165,6 @@
                         }
 
                         const qrCodeResult = await qrCodeResponse.json();
-                        console.log('Resposta da API do QR Code:', qrCodeResult);
 
                         if (qrCodeResult && qrCodeResult.qrCode) {
                             qrCodeElement.src = qrCodeResult.qrCode;
@@ -218,22 +211,19 @@
                 .replace('Data de Nascimento:', 'Data de Nascimento: ')
                 .replace(/(\d{4}-\d{2}-\d{2})/, (match) => {
                     const date = new Date(match);
-                    const day = String(date.getDate()).padStart(2, '0');
-                    const month = String(date.getMonth() + 1).padStart(2, '0');
-                    const year = date.getFullYear();
-                    return `${day}/${month}/${year}`;
+                    return date.toLocaleDateString('pt-BR');
                 });
             doc.text(details, 10, 30);
 
-            // Adicionar QR Code com borda verde e centralizá-lo
+            // Adicionar QR Code com borda verde
             if (qrCodeDataUrl) {
                 const qrCodeWidth = 50;
                 const qrCodeHeight = 50;
-                const pageWidth = doc.internal.pageSize.width;
-                const qrCodeX = (pageWidth - qrCodeWidth) / 2;
+                const qrCodeX = (doc.internal.pageSize.width - qrCodeWidth) / 2; // Centralizar QR Code
+                const qrCodeY = 60; // Espaço entre informações e QR Code
                 doc.setDrawColor(50, 205, 50); // Cor da borda verde
-                doc.rect(qrCodeX - 1, 50 - 1, qrCodeWidth + 2, qrCodeHeight + 2); // Borda verde
-                doc.addImage(qrCodeDataUrl, 'PNG', qrCodeX, 50, qrCodeWidth, qrCodeHeight);
+                doc.rect(qrCodeX, qrCodeY, qrCodeWidth, qrCodeHeight); // Borda verde
+                doc.addImage(qrCodeDataUrl, 'PNG', qrCodeX, qrCodeY, qrCodeWidth, qrCodeHeight);
             }
 
             // Salvar PDF
